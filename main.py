@@ -9,7 +9,9 @@ pygame.init()
 # Constants
 CELL_SIZE = 20
 WINDOW_SIZE = (32 * CELL_SIZE, 32 * CELL_SIZE)
-FPS = 7
+FPS = 30  # Increase frame rate for smoother animation
+PLAYER_SPEED = 5  # Player moves every 5 frames
+GHOST_SPEED = 7   # Ghosts move every 7 frames
 
 # Colors
 BLACK = (0, 0, 0)
@@ -227,7 +229,8 @@ def game_loop(screen, clock):
     
     # Main game loop
     running = True
-    move_counter = 0
+    player_move_counter = 0
+    ghost_move_counter = 0
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -246,13 +249,16 @@ def game_loop(screen, clock):
                 elif event.key == pygame.K_SPACE:  # Stop movement
                     player.set_next_direction(0, 0)
 
-        # Update player position every frame
-        player.update(game_map)
+        # Update player position every PLAYER_SPEED frames
+        player_move_counter += 1
+        if player_move_counter >= PLAYER_SPEED:
+            player_move_counter = 0
+            player.update(game_map)
 
-        # Move ghosts every 2 frames (to make them slower than Pacman)
-        move_counter += 1
-        if move_counter >= 2:
-            move_counter = 0
+        # Move ghosts every GHOST_SPEED frames
+        ghost_move_counter += 1
+        if ghost_move_counter >= GHOST_SPEED:
+            ghost_move_counter = 0
             for ghost in ghosts:
                 dx, dy = ghost.calculate_move(player.x, player.y, game_map)
                 ghost.move(dx, dy, game_map)

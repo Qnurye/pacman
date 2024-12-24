@@ -1,7 +1,7 @@
 import random
 from enum import Enum
 
-from pathfinder import PathFinder
+from src.game.pathfinder import PathFinder
 
 
 class GhostPersonality(Enum):
